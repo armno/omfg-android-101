@@ -1,6 +1,9 @@
 package th.in.armno.omfgandroid;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
@@ -15,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -30,6 +34,10 @@ public class MainActivity extends ActionBarActivity
     ArrayAdapter mArrayAdapter;
     ArrayList mNameList = new ArrayList();
     ShareActionProvider mShareActionProvider;
+
+    private static final String PREFS = "prefs";
+    private static final String PREF_NAME = "name";
+    SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +68,57 @@ public class MainActivity extends ActionBarActivity
 
         // 5. set this activity to react to list item being pressed
         mainListView.setOnItemClickListener(this);
+
+        // 7. greet the user, or ask for their name if new
+        displayWelcome();
+    }
+
+    private void displayWelcome() {
+        // access the device's key-value storage
+        mSharedPreferences = getSharedPreferences(PREFS, MODE_PRIVATE);
+
+        // read the user's name or an empty string if nothing found
+        String name = mSharedPreferences.getString(PREF_NAME, "");
+
+        if (name.length() > 0) {
+            // display Toast welcoming the user
+            Toast.makeText(this, "Welcome back, " + name + "!", Toast.LENGTH_LONG).show();
+        } else {
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.setTitle("Hello!");
+            alert.setMessage("What is your name?");
+
+            // create EditText for the entry field
+            final EditText input = new EditText(this);
+            alert.setView(input);
+
+            // make an "OK" button the save the name
+            alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // grab the EditText's input
+                    String inputName = input.getText().toString();
+
+                    // put it into memory
+                    SharedPreferences.Editor e = mSharedPreferences.edit();
+                    e.putString(PREF_NAME, inputName);
+                    e.commit();
+
+                    // welcome the user
+                    Toast.makeText(getApplicationContext(), "Welcome, " + inputName + "!", Toast.LENGTH_LONG).show();
+                }
+            });
+
+            // make a cancel button to dismiss the alert
+            alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // do nothing ...
+                }
+            });
+
+            alert.show();
+        }
     }
 
     @Override
@@ -97,7 +156,7 @@ public class MainActivity extends ActionBarActivity
     public void onClick(View v) {
         String userText = mainEditText.getText().toString();
         mainTextView.setText(userText
-        + " is learning Android. Unbelievable!");
+                + " is learning Android. Unbelievable!");
 
         mNameList.add(userText);
         mArrayAdapter.notifyDataSetChanged();

@@ -2,8 +2,6 @@
 
 learning android app dev (again!) from [a tutorial at raywenderlich.com](http://www.raywenderlich.com/78576/android-tutorial-for-beginners-part-2).
 
-(i don't like java. just fyi. (5 years ago i would say _i hate java_). but it seems to be the only choice here.)
-
 ## random notes taken.
 
 - created an app from "Blank Activity" template.
@@ -71,3 +69,19 @@ i like the second one more.
 - 3) let android does the job adding all available options
 - output on an actual device is not the same with in the emulator
 - last-used share option is placed next to menu item in menu bar. i think it's a bit off.
+
+### SharedPreferences
+
+- the concept is like localStorage in the web world.
+- key-value, stored in a file somewhere.
+- `Toast` is that cool overlay message.
+- we create a dialog on the fly when there is no user's name stored in SharedPreferences.
+- we also create view elements on the fly and put them in the created dialog.
+- `alert.setPositiveButton` and `alert.setNegativeButton` are event listener methods for OK and Cancel buttons
+- now i see the use of closure-style event listener (or whatever it is named)
+  - many click listeners have the same method name which is `onClick`
+  - they are just belongs to different interfaces.
+  - we cannot have the same method names in our main class.
+  - that's why we have to put `onClick` methods inline to each click listener
+
+(i don't like java. just fyi. (5 years ago i would say _i hate java_). but it seems to be the only choice here.)
