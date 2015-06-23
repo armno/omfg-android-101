@@ -47,6 +47,8 @@ i like the second one more.
 - 2) grab the element from the layout in `onCreate` method: `mainListView = (ListView) findViewById(R.id.main_listview)`.
 - 3) do something with it
 
+### Layouts
+
 - `<LinearLayout>` is easier to understand (to me at least) than the default `<RelativeLayout>`. (or it is just getting started?)
 - `TextView` -> `setText()`
 - `EditView` -> `getText()`
@@ -58,3 +60,14 @@ i like the second one more.
 - but in the main activity, it's becoming picky now.
 - we need to have an `ArrayAdapter` as a bridge between our dataset (array in java) with the actual `<ListView>` in the view.
 - updating the list view: 1) modify data set (source array). 2) call `.notifyDataSetChanged()` method on ArrayAdapter instance.
+
+- adding event listener to an item in `<ListView>` needs interface `AdapterView.OnItemClickListener`
+- `setOnItemClickListener` is bound to each items in `<ListView>`
+
+### Intents
+
+- 1) grab the menu item from menu xml
+- 2) add `Intent.ACTION_SEND` to the menu items
+- 3) let android does the job adding all available options
+- output on an actual device is not the same with in the emulator
+- last-used share option is placed next to menu item in menu bar. i think it's a bit off.
