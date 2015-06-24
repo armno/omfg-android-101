@@ -38,7 +38,7 @@ public class MainActivity extends ActionBarActivity
     Button mainButton;
     EditText mainEditText;
     ListView mainListView;
-    ArrayAdapter mArrayAdapter;
+    JSONAdapter mJSONAdapter;
     ArrayList mNameList = new ArrayList();
     ShareActionProvider mShareActionProvider;
 
@@ -67,18 +67,24 @@ public class MainActivity extends ActionBarActivity
         mainListView = (ListView) findViewById(R.id.main_listview);
 
         // create an arrayadapter for the listview
-        mArrayAdapter = new ArrayAdapter(this,
-                android.R.layout.simple_list_item_1,
-                mNameList);
+//        mArrayAdapter = new ArrayAdapter(this,
+//                android.R.layout.simple_list_item_1,
+//                mNameList);
 
         // set the listview to use arrayadapter
-        mainListView.setAdapter(mArrayAdapter);
+//        mainListView.setAdapter(mArrayAdapter);
 
         // 5. set this activity to react to list item being pressed
         mainListView.setOnItemClickListener(this);
 
         // 7. greet the user, or ask for their name if new
         displayWelcome();
+
+        // 10. create a jsonadapter for the listview
+        mJSONAdapter = new JSONAdapter(this, getLayoutInflater());
+
+        // set the listview to use jsonadapter
+        mainListView.setAdapter(mJSONAdapter);
     }
 
     private void displayWelcome() {
@@ -178,7 +184,7 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Log.d("omg android", position + ": " + mNameList.get(position));
+//        Log.d("omg android", position + ": " + mNameList.get(position));
     }
 
     private void queryBooks(String searchString) {
@@ -207,7 +213,10 @@ public class MainActivity extends ActionBarActivity
                         Toast.makeText(getApplicationContext(), "Success!", Toast.LENGTH_LONG).show();
 
                         // 8. for now, just log the results
-                        Log.d("omg android", jsonObject.toString());
+//                        Log.d("omg android", jsonObject.toString());
+
+                        // update the data in your custom method
+                        mJSONAdapter.updateData(jsonObject.optJSONArray("docs"));
                     }
 
                     @Override

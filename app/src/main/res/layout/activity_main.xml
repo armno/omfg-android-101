@@ -28,7 +28,7 @@
         android:layout_marginRight="20dp"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/hint"/>
+        android:hint="@string/hint"/>
 
     <!-- list whose dataset is defined in code with an adapter -->
     <ListView
