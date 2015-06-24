@@ -20,6 +20,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 
@@ -39,6 +46,8 @@ public class MainActivity extends ActionBarActivity
     private static final String PREF_NAME = "name";
     SharedPreferences mSharedPreferences;
 
+    private static final String QUERY_URL = "https://openlibrary.org/search.json?q=";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +55,6 @@ public class MainActivity extends ActionBarActivity
 
         // 1. Access the TextView defined in layout xml and set its text
         mainTextView = (TextView) findViewById(R.id.main_textview);
-        mainTextView.setText("Set the text in Java, really?");
 
         // 2. Access the Button defined in layout xml and listen for it here
         mainButton = (Button) findViewById(R.id.main_button);
@@ -154,19 +162,58 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onClick(View v) {
-        String userText = mainEditText.getText().toString();
-        mainTextView.setText(userText
-                + " is learning Android. Unbelievable!");
+//        String userText = mainEditText.getText().toString();
+//        mainTextView.setText(userText
+//                + " is learning Android. Unbelievable!");
+//
+//        mNameList.add(userText);
+//        mArrayAdapter.notifyDataSetChanged();
+//
+//        // 6. the text you'd like to share has changed and you need to update
+//        setShareIntent();
 
-        mNameList.add(userText);
-        mArrayAdapter.notifyDataSetChanged();
-
-        // 6. the text you'd like to share has changed and you need to update
-        setShareIntent();
+        // 9. take what was typed into EditText and use in search
+        queryBooks(mainEditText.getText().toString());
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.d("omg android", position + ": " + mNameList.get(position));
+    }
+
+    private void queryBooks(String searchString) {
+
+        // prepare you search string to be put in a url
+        // it might have reserved characters or something
+        String urlString = "";
+        try {
+            urlString = URLEncoder.encode(searchString, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            // if this fails for some reason, let the user know why
+            e.printStackTrace();
+            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+
+        // create a client to perform networking
+        AsyncHttpClient client = new AsyncHttpClient();
+
+        // have the client get a JSONArray of data
+        // and define how to respond
+        client.get(QUERY_URL + urlString,
+                new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(JSONObject jsonObject) {
+
+                        Toast.makeText(getApplicationContext(), "Success!", Toast.LENGTH_LONG).show();
+
+                        // 8. for now, just log the results
+                        Log.d("omg android", jsonObject.toString());
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Throwable throwable, JSONObject error) {
+                        Toast.makeText(getApplicationContext(), "Error: " + statusCode + " " + throwable.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 }
