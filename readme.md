@@ -85,3 +85,49 @@ i like the second one more.
   - that's why we have to put `onClick` methods inline to each click listener
 
 (i don't like java. just fyi. (5 years ago i would say _i hate java_). but it seems to be the only choice here.)
+
+## Creating an actual app: bookmaster
+
+- app icon can be set in `AndroidManifest.xml` with attribute `android:icon` on `<application>` tag.
+- Gradle is a build tool in android world. It also does dependencies management.
+- Installing new dependencies: add package name and version in `build.gradle` fi.le. then Sync Project with Gradle Files.
+- `URLEncode` throws an exception when i forgot to add `permission.INTERNET` in the manifest file.
+- `<uses-permission>` is placed before closing `</manifest>`
+
+### HTTP requests
+
+- `AsyncHttpClient` is the class used.
+- 1) create `client` 2) call method `.get`. Actually the API is somehow like in JavaScript world. `client.get(url, callback)` unless `callback` here is an object but anyway, with success and failure response handlers.
+- `getApplicationContext()` reminds me of `this` in javascript world. i think `this` is used in normal methods while `getApplicationContext` is used in callback methods. (please correct me if i'm wrong)
+
+### Layouts
+
+- i was too sleepy when i coded along this section. summarizing this note again helped me to understand RelativeLayout more. reading through each attributes in elements makes more sense now.
+- we create a RelativeLayout for each row of books. i think of RelativeLayout is a self-contained piece of view where each element in the view doesn't have to care outside world.
+- thumbnail + title + description is a perfect example.
+- root element of RelativeLayout is `<RelativeLayout>` of course.
+- inside of `<RelativeLayout>` we can UI elements just like with LinearLayout, the differences are:
+		- we set `height` and `width` specifically for some elements
+		- `android:layout_*` attributes are now relative ones, for example, `android:layout_alignCenterVertical` makes the element vertically centered relatively to the parent. while `_alignParentLeft` makes the element aligned to the left of its parent.
+- `scaleType=centerInside` makes the element scale of its center. (`transform-origin` prop in css?)
+
+- then we add a `<TextView>` and tell it to stay at the right of the thumbnail (referenced by thumnail's `id` attribute). also align-top to the thumbnail relatively as well.
+- lastly we have author's name in a `<TextView>` relatively to the book's name (2nd item). since we set the layout based on the book's name, there is no need to set `marginLeft` of this element.
+- so `id` attribute is really important in RelativeLayout world. also we need to make sure that there is no circular references of `id`s in the layout.
+- (the word `inflate` is new to me. it means ขยาย in thai)
+
+### putting JSON into new row layout
+
+- we create new adapter class called `JSONAdapter` (extends `BaseAdapter`) because we want to map raw JSON to the new layout. (wondering if android doesn't have this built in like `ArrayAdapter` class...)
+- properties: `Context` use with Picasso image loader, `LayoutInflater` communicates with the view, `JSONArray` for the datasource.
+- then we create a subclass(?) inside our `JSONAdapter` called `ViewHolder` that will be reused over and over when scrolling. so we don't create too many views.
+- in `getView` method, we create a new view to ViewHolder if it doesn't exist yet (using `findViewById` and all that). then we call `setTag` method to put the ViewHolder instance for future use.
+- `getView` is also where we attach `row_layout.xml` to the view inflator.
+
+- we check if the json row has cover image, then we use Picasso to fetch the image from the URL. otherwise just use the placeholder thumbnail image we have in `res` folder.
+- Picasso fetches images in a separated thread with UI thread so it doesn't block the UI.
+
+### dialogs
+
+- `ProgressDialog` it is.
+- create a dialog instance in `onCreate` method. call dialog `.show()` and `dismiss()` at ease.

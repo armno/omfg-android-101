@@ -12,7 +12,6 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 /**
  * Created by armno on 6/24/15 AD.
@@ -52,7 +51,7 @@ public class JSONAdapter extends BaseAdapter {
         // check if the view already exists
         // if so, no need to inflate and findViewById again
         if (view == null) {
-            // inlfate the custom row layout from you xml
+            // inflate the custom row layout from you xml
             view = mInflater.inflate(R.layout.row_book, null);
 
             // create a new "holder" with subviews
