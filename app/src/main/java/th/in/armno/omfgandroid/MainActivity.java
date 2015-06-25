@@ -1,6 +1,7 @@
 package th.in.armno.omfgandroid;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,12 +9,10 @@ import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.ShareActionProvider;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -41,6 +40,7 @@ public class MainActivity extends ActionBarActivity
     JSONAdapter mJSONAdapter;
     ArrayList mNameList = new ArrayList();
     ShareActionProvider mShareActionProvider;
+    ProgressDialog mDialog;
 
     private static final String PREFS = "prefs";
     private static final String PREF_NAME = "name";
@@ -85,6 +85,10 @@ public class MainActivity extends ActionBarActivity
 
         // set the listview to use jsonadapter
         mainListView.setAdapter(mJSONAdapter);
+
+        mDialog = new ProgressDialog(this);
+        mDialog.setMessage("Searching for books");
+        mDialog.setCancelable(false);
     }
 
     private void displayWelcome() {
@@ -203,12 +207,18 @@ public class MainActivity extends ActionBarActivity
         // create a client to perform networking
         AsyncHttpClient client = new AsyncHttpClient();
 
+        // show progress dialog to inform user that a task in the background is occurring
+        mDialog.show();
+
         // have the client get a JSONArray of data
         // and define how to respond
         client.get(QUERY_URL + urlString,
                 new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(JSONObject jsonObject) {
+
+                        // 11. dismiss the progressdialog
+                        mDialog.dismiss();
 
                         Toast.makeText(getApplicationContext(), "Success!", Toast.LENGTH_LONG).show();
 
@@ -221,6 +231,10 @@ public class MainActivity extends ActionBarActivity
 
                     @Override
                     public void onFailure(int statusCode, Throwable throwable, JSONObject error) {
+
+                        // 11. dismiss the progressdialog
+                        mDialog.dismiss();
+
                         Toast.makeText(getApplicationContext(), "Error: " + statusCode + " " + throwable.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });

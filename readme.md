@@ -1,6 +1,6 @@
 # android-101
 
-learning android app dev (again!) from [a tutorial at raywenderlich.com](http://www.raywenderlich.com/78576/android-tutorial-for-beginners-part-2).
+learning android app dev (again!) from [a tutorial at raywenderlich.com](http://www.raywenderlich.com/78576/android-tutorial-for-beginners-part-2) and [part 3](http://www.raywenderlich.com/78578/android-tutorial-for-beginners-part-3).
 
 ## random notes taken.
 
