@@ -84,8 +84,6 @@ i like the second one more.
   - we cannot have the same method names in our main class.
   - that's why we have to put `onClick` methods inline to each click listener
 
-(i don't like java. just fyi. (5 years ago i would say _i hate java_). but it seems to be the only choice here.)
-
 ## Creating an actual app: bookmaster
 
 - app icon can be set in `AndroidManifest.xml` with attribute `android:icon` on `<application>` tag.
@@ -131,3 +129,16 @@ i like the second one more.
 
 - `ProgressDialog` it is.
 - create a dialog instance in `onCreate` method. call dialog `.show()` and `dismiss()` at ease.
+
+### details view
+
+- we create another "activity" to display the cover image.
+- `.DetailActivity` is a child activity of `.MainActivity` (the main class)
+- then we have a java class `DetailActivity` which also has `onCreate` method.
+- when click on an item in search results in main activity, we create new Intent and keep some of data of selected item (`coverID`) as the intent's extra.
+- then start `DetailActivity` with intent object created.
+- in `DetailActivity.onCreate` method, we can get the intent object using `this.getIntent()` and extract "extras" from that intent.
+- we also create a new view `activity_detail.xml` for `DetailActivity`. It has only 1 image displayed so we create `<ImageView>` layout.
+- adding `android:launchMode="singleTop"` to MainActivity tells "the boss" to use the same MainActivity if it is already created. so when we come back from detail view, we will be right where we left off.
+
+(i don't like java. just fyi. (5 years ago i would say _i hate java_). but it seems to be the only choice here.)

@@ -152,7 +152,7 @@ public class MainActivity extends ActionBarActivity
             mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
         }
 
-        // create an Intent to share your conen
+        // create an Intent to share your content
         setShareIntent();
 
         return true;
@@ -188,7 +188,21 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//        Log.d("omg android", position + ": " + mNameList.get(position));
+
+        // 12. now that the user's chosen book, grab the cover data
+        JSONObject jsonObject = (JSONObject) mJSONAdapter.getItem(position);
+        String coverID = jsonObject.optString("cover_i", "");
+
+        // create an intent to take you over to a new DetailActivity
+        Intent detailIntent = new Intent(this, DetailActivity.class);
+
+        // pack away the data about the cover into your intent before you head out
+        detailIntent.putExtra("coverID", coverID);
+
+        // TODO: add any other data you would like as extras
+
+        // start the next activity using your prepared intent
+        startActivity(detailIntent);
     }
 
     private void queryBooks(String searchString) {
